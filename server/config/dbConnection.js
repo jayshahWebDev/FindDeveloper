@@ -12,6 +12,4 @@ const dbConnection = () => {
     });
 };
 
-export {
-  dbConnection,
-};
+export { dbConnection };
