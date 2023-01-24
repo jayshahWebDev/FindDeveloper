@@ -27,7 +27,7 @@ const signUp = async (req, res) => {
     } = req.body;
 
     if (!name || !email || !password || !role || !profile || !linkedInProfile)
-      throw new Error("Please Pass All Required Fields");
+      throw new Error("Please Fill All Required Fields");
 
     if (role != "ADMIN" && role != "CANDIDATE" && role != "RECRUITER")
       throw new Error("Please Pass Valid Details");
@@ -78,7 +78,7 @@ const signIn = async (req, res) => {
     let { email, password, role } = req.body;
 
     if (!email || !password || !role)
-      throw new Error("Please Pass All Required Fields");
+      throw new Error("Please Fill All Required Fields");
 
     if (role != "ADMIN" && role != "CANDIDATE" && role != "RECRUITER")
       throw new Error("Please Pass Valid Details");
