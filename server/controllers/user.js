@@ -1,28 +1,32 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
+import cloudinary from "cloudinary";
+import fs from "fs";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const signUp = async (req, res) => {
   try {
+    let { profile } = req.files;
+    let clodinaryUpload = await cloudinary.uploader.upload(
+      profile.tempFilePath
+    );
     let {
       name,
       email,
       password,
       role,
-      profileURL,
       linkedInProfile,
       githubProfile,
       portfolioWebsite,
     } = req.body;
 
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !role ||
-      !profileURL ||
-      !linkedInProfile
-    )
+    if (!name || !email || !password || !role || !profile || !linkedInProfile)
       throw new Error("Please Pass All Required Fields");
 
     if (role != "ADMIN" && role != "CANDIDATE" && role != "RECRUITER")
@@ -39,7 +43,7 @@ const signUp = async (req, res) => {
       email,
       password: encryptedPassword,
       role,
-      profileURL,
+      profileURL: clodinaryUpload.url,
       linkedInProfile,
       githubProfile,
       portfolioWebsite,
@@ -48,6 +52,12 @@ const signUp = async (req, res) => {
     let newUser = new User(data);
     let saveUser = await newUser.save();
     let token = jwt.sign({ _id: newUser._id }, process.env.SECRET_KEY);
+    let path = profile.tempFilePath.split("\\");
+    fs.unlink(`tmp/${path[1]}`, (error) => {
+      if (error) {
+        console.log("temp file removed err::", error);
+      }
+    });
 
     res.cookie("fdT", token);
 
