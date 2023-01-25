@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 4000;
 import fileupload from "express-fileupload";
 import userRoute from "./routes/user.js";
 import skillRoute from "./routes/skill.js";
+import availabilityRoute from "./routes/availability.js";
 
 dbConnection();
 
@@ -22,6 +23,7 @@ app.use(
 
 app.use("/api", userRoute);
 app.use("/api", skillRoute);
+app.use("/api", availabilityRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);

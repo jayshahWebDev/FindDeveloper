@@ -14,6 +14,7 @@ const userSchema = new Schema(
     isVerify: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
+    isProfileUpdated: { type: Boolean, default: false },
     linkedInProfile: { type: String },
     githubProfile: { type: String },
     portfolioWebsite: { type: String },
