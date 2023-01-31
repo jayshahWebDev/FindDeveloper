@@ -5,10 +5,10 @@ const createSkill = async (req, res) => {
     let { name } = req.body;
     if (!name) throw new Error("Please Fill All Valid Fields");
 
-    let nameExists = await Skill.findOne({ name:name.toUpperCase() });
+    let nameExists = await Skill.findOne({ name });
     if (nameExists) throw new Error("Skill Already Exists");
 
-    let data = new Skill({ name: name.toUpperCase() });
+    let data = new Skill({ name });
     let saveSkill = await data.save();
 
     res.status(201).json({
@@ -25,7 +25,10 @@ const createSkill = async (req, res) => {
 
 const getAllSkill = async (req, res) => {
   try {
-    let skillData = await Skill.find();
+    let { name } = req.body;
+    let skillData = await Skill.find({
+      name: { $regex: ".*" + name + ".*", $options: "i" },
+    });
 
     res.status(201).json({
       success: true,
@@ -50,7 +53,7 @@ const updateSkill = async (req, res) => {
     let nameExists = await Skill.findOne({ name });
     if (nameExists) throw new Error("Skill Already Exists");
 
-    let updateSkillData = await Skill.findOneAndUpdate({ _id }, { name:name.toUpperCase() });
+    let updateSkillData = await Skill.findOneAndUpdate({ _id }, { name });
 
     res.status(201).json({
       success: true,
