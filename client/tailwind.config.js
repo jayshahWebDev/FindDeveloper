@@ -9,6 +9,8 @@ module.exports = {
       colors: {
         blue: "#0a66c2",
         gray: "#70757a",
+        lightWhite: "#fafbff",
+        blueText: "#2081e2",
       },
       screens: {
         tablet: "481px",
